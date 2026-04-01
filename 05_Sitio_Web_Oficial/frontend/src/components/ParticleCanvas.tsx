@@ -42,7 +42,10 @@ export default function ParticleCanvas() {
     };
 
     const isLight = resolvedTheme === 'light';
-    const colors = ["#6C63FF", "#00D4FF", "#FF6B9D"];
+    // Use higher contrast colors for light mode particles
+    const colors = isLight 
+      ? ["#4f46e5", "#0891b2", "#db2777"] 
+      : ["#6C63FF", "#00D4FF", "#FF6B9D"];
 
     let particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () => ({
       x: Math.random() * canvas.width,
@@ -50,7 +53,7 @@ export default function ParticleCanvas() {
       vx: (Math.random() - 0.5) * 0.4,
       vy: (Math.random() - 0.5) * 0.4,
       size: Math.random() * 2 + 0.5,
-      opacity: isLight ? (Math.random() * 0.4 + 0.1) : (Math.random() * 0.6 + 0.2),
+      opacity: isLight ? (Math.random() * 0.5 + 0.3) : (Math.random() * 0.6 + 0.2), // Increased opacity for light mode
       color: colors[Math.floor(Math.random() * colors.length)],
       pulse: Math.random() * Math.PI * 2,
       pulseSpeed: Math.random() * 0.02 + 0.005,
