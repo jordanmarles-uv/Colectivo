@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "next": "latest",
+    "next-themes": "latest",
     "react": "latest",
     "react-dom": "latest",
     "framer-motion": "^11.11.0",

@@ -34,7 +34,7 @@ export default function HeroSection() {
           setWordIndex(i => (i + 1) % WORDS.length);
         }
       }
-    }, isDeleting ? 60 : 110);
+    }, isDeleting ? 40 : 80); // sped up typewriter slightly for professional feel
     return () => clearTimeout(timeout);
   }, [charIndex, isDeleting, wordIndex]);
 
@@ -47,75 +47,89 @@ export default function HeroSection() {
       const cy = window.innerHeight / 2;
       const dx = (e.clientX - cx) / cx;
       const dy = (e.clientY - cy) / cy;
-      el.style.transform = `translate(${dx * 12}px, ${dy * 8}px)`;
+      el.style.transform = `translate(${dx * 8}px, ${dy * 5}px)`; // reduced parallax intensity
     };
     window.addEventListener("mousemove", handler);
     return () => window.removeEventListener("mousemove", handler);
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden scene">
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden scene pt-20">
+      {/* Particle Canvas constrained to Hero section only */}
+      <div className="absolute inset-0 z-[-1]">
+        <ParticleCanvas />
+      </div>
+
       {/* Grid overlay */}
-      <div className="absolute inset-0 grid-overlay opacity-40" />
+      <div className="absolute inset-0 grid-overlay opacity-50 z-[-1]" />
 
       {/* Radial glow center */}
       <div
-        className="absolute rounded-full pointer-events-none"
+        className="absolute rounded-full pointer-events-none z-[-1] hidden dark:block"
         style={{
           width: "700px", height: "700px",
           top: "50%", left: "50%",
           transform: "translate(-50%, -50%)",
-          background: "radial-gradient(circle, rgba(108,99,255,0.12) 0%, rgba(0,212,255,0.05) 40%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(108,99,255,0.08) 0%, rgba(0,212,255,0.03) 40%, transparent 70%)",
+          filter: "blur(40px)",
+        }}
+      />
+      <div
+        className="absolute rounded-full pointer-events-none z-[-1] block dark:hidden"
+        style={{
+          width: "700px", height: "700px",
+          top: "50%", left: "50%",
+          transform: "translate(-50%, -50%)",
+          background: "radial-gradient(circle, rgba(108,99,255,0.05) 0%, rgba(0,212,255,0.02) 40%, transparent 70%)",
           filter: "blur(40px)",
         }}
       />
 
       {/* Badge */}
-      <div className="float glass neon-border rounded-full px-5 py-2 text-xs font-semibold tracking-widest uppercase mb-8"
-        style={{ color: "#00D4FF" }}>
+      <div className="float border border-accent/20 rounded-full bg-accent/5 px-4 py-1.5 text-[0.65rem] md:text-xs font-semibold tracking-widest uppercase mb-8 text-accent shadow-sm"
+        style={{ color: "var(--accent-1)" }}>
         ✦ Colectivo Transmedia · Cali, Colombia
       </div>
 
       {/* Main headline */}
       <h1
         ref={titleRef}
-        className="text-center font-space leading-tight mb-4"
+        className="text-center font-space leading-[1.05] tracking-tight mb-5"
         style={{
-          fontSize: "clamp(2.5rem, 7vw, 6.5rem)",
-          fontWeight: 900,
+          fontSize: "clamp(2rem, 5vw, 4.5rem)", // Reduced sizes for cleaner typography
+          fontWeight: 800,
           transition: "transform 0.1s ease",
         }}
       >
         <span className="gradient-text text-glow">Ciencia Densa,</span>
         <br />
-        <span style={{ color: "#fff" }}>Narrativa Ligera.</span>
+        <span style={{ color: "var(--text-primary)" }}>Narrativa Ligera.</span>
       </h1>
 
       {/* Typewriter sub-headline */}
       <p
         className="text-center mb-10"
         style={{
-          fontSize: "clamp(1rem, 2.5vw, 1.4rem)",
-          color: "rgba(255,255,255,0.55)",
-          maxWidth: "640px",
-          lineHeight: 1.7,
+          fontSize: "clamp(0.9rem, 2vw, 1.15rem)", // Reduced text size for elegance
+          color: "var(--text-secondary)",
+          maxWidth: "580px",
+          lineHeight: 1.6,
         }}
       >
         Transformamos{" "}
-        <span style={{ color: "#6C63FF", fontWeight: 700 }}>
+        <span style={{ color: "var(--accent-1)", fontWeight: 600 }}>
           {displayed}<span className="typewriter-cursor">|</span>
         </span>{" "}
         en narrativas visuales que conquistan inversionistas.
       </p>
 
       {/* CTA Buttons */}
-      <div className="flex flex-wrap gap-4 justify-center mb-16">
+      <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center mb-16 w-full sm:w-auto">
         <button
           data-hover
-          className="magnetic-btn px-8 py-4 rounded-full font-semibold text-sm tracking-wide"
+          className="magnetic-btn w-full sm:w-auto px-7 py-3.5 rounded-full font-semibold text-sm tracking-wide shadow-md hover:shadow-lg transition-shadow"
           style={{
-            background: "linear-gradient(135deg, #6C63FF, #00D4FF)",
-            boxShadow: "0 0 30px rgba(108,99,255,0.5)",
+            background: "linear-gradient(135deg, var(--accent-1), var(--accent-2))",
             color: "#fff",
             cursor: "none",
           }}
@@ -124,32 +138,32 @@ export default function HeroSection() {
         </button>
         <button
           data-hover
-          className="magnetic-btn px-8 py-4 rounded-full font-semibold text-sm tracking-wide glass neon-border"
-          style={{ color: "#fff", cursor: "none" }}
+          className="magnetic-btn w-full sm:w-auto px-7 py-3.5 rounded-full font-semibold text-sm tracking-wide clean-border bg-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+          style={{ color: "var(--text-primary)", cursor: "none" }}
         >
           Agenda una Asesoría
         </button>
       </div>
 
-      {/* Stats row */}
-      <div className="flex flex-wrap justify-center gap-8">
+      {/* Stats row - Flatter design replacing old cards */}
+      <div className="flex flex-wrap justify-center gap-x-12 gap-y-8 mt-4 pt-8 border-t border-black/5 dark:border-white/5">
         {[
           { num: "3", unit: "Productos Híbridos", desc: "IA + Empatía Humana" },
-          { num: "100%", unit: "Coautoría Moral", desc: "Propiedad intelectual blindada" },
+          { num: "100%", unit: "Coautoría Moral", desc: "Plena propiedad tuya" },
           { num: "∞", unit: "Impacto Visual", desc: "Narrativas transmedia" },
         ].map((s, i) => (
-          <div key={i} className="glass rounded-2xl px-6 py-4 text-center" style={{ minWidth: 160 }}>
-            <div className="gradient-text font-space font-black" style={{ fontSize: "2rem" }}>{s.num}</div>
-            <div className="font-semibold text-sm" style={{ color: "#fff" }}>{s.unit}</div>
-            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem" }}>{s.desc}</div>
+          <div key={i} className="text-center" style={{ minWidth: 140 }}>
+            <div className="gradient-text font-space font-black tracking-tighter" style={{ fontSize: "1.75rem" }}>{s.num}</div>
+            <div className="font-semibold text-sm mt-1 mb-0.5" style={{ color: "var(--text-primary)" }}>{s.unit}</div>
+            <div style={{ color: "var(--text-secondary)", fontSize: "0.75rem" }}>{s.desc}</div>
           </div>
         ))}
       </div>
 
       {/* Scroll arrow */}
-      <div className="absolute bottom-10 flex flex-col items-center gap-2" style={{ color: "rgba(255,255,255,0.3)" }}>
-        <span className="text-xs tracking-widest uppercase">Explorar</span>
-        <div className="float-slow" style={{ fontSize: "1.5rem" }}>↓</div>
+      <div className="absolute bottom-6 flex flex-col items-center gap-2" style={{ color: "var(--text-secondary)" }}>
+        <span className="text-[0.65rem] font-bold tracking-[0.2em] uppercase">Explorar</span>
+        <div className="float-slow" style={{ fontSize: "1.2rem" }}>↓</div>
       </div>
     </section>
   );

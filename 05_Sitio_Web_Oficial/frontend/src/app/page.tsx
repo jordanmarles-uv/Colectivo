@@ -11,9 +11,8 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="animated-bg min-h-screen relative">
+    <main className="min-h-screen relative transition-colors duration-300">
       {/* Global interactive elements */}
-      <ParticleCanvas />
       <CustomCursor />
       <Navbar />
 

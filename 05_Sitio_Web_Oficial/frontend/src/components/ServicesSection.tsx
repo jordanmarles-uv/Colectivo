@@ -1,132 +1,123 @@
-"use client";
-import { useRef, useEffect, useState } from "react";
+import Image from "next/image";
+import { useRef } from "react";
 
 const services = [
   {
     icon: "🧬",
     title: "Memorias Scrollytelling",
-    tagline: "Tu investigación como una película interactiva",
+    tagline: "Tu investigación como experiencia interactiva",
     description:
-      "La IA analiza cientos de páginas de datos. Nosotros los convertimos en una experiencia web inmersiva donde el usuario descubre la ciencia al hacer scroll, con audio, ilustraciones cálidas y métricas que cobran vida.",
-    color: "#6C63FF",
-    stats: "→ Hasta 8× más comprensión que un PDF tradicional",
+      "La IA procesa extensos repositorios de datos y nosotros estructuramos el recorrido. Convierte tu paper en una experiencia inmersiva web donde cada scroll desata ilustraciones cálidas, audio y métricas que cobran vida de forma natural y accesible.",
+    color: "var(--accent-1)",
+    stats: "→ Hasta 8× más comprensión sin fricción",
+    image: "/images/service_scrollytelling_1775027715969.png",
   },
   {
     icon: "💡",
     title: "Pitch Deck Terapéutico",
-    tagline: "Tu historia personal, tu mejor argumento de venta",
+    tagline: "Tu historia personal como argumento clave",
     description:
-      "Un agente IA reconstruye tu modelo financiero al estándar de Silicon Valley. Luego tú y nosotros ensayamos 1-a-1 tu pitch para que el CEO salga con confianza, carisma y la historia de vida que enamora a los fondos de capital.",
-    color: "#00D4FF",
-    stats: "→ El 72% de las rondas se ganan en los primeros 90 segundos",
+      "Un agente IA reconstruye tu modelo financiero al estándar de Silicon Valley. Luego trabajamos 1-a-1 tu pitch para que salgas con la claridad, carisma y storytelling que todo fondo de capital busca antes de invertir.",
+    color: "var(--accent-2)",
+    stats: "→ Captura la atención en los primeros 90 segundos",
+    image: "/images/service_pitch_deck_1775027736072.png",
   },
   {
     icon: "📊",
     title: "Kit de Traducción de Datos",
-    tagline: "Un paper de 60 páginas, convertido en 1 infografía viral",
+    tagline: "De 60 páginas a un ecosistema viral",
     description:
-      "La IA lee el documento y encuentra la analogía perfecta del mundo real. Nosotros la dibujamos con estética premium para que cualquier persona en LinkedIn o Instagram la entienda y comparta en segundos.",
-    color: "#FF6B9D",
-    stats: "→ 12× más alcance orgánico en redes sociales científicas",
+      "Nuestros algoritmos escanean el clúster de información para encontrar la analogía del mundo real perfecta. Después la sintetizamos con una dirección de arte minimalista para que cualquier usuario de LinkedIn entienda tu tesis en segundos.",
+    color: "var(--accent-3)",
+    stats: "→ Alcance orgánico masivo y validación social",
+    image: "/images/service_data_kit_1775027766716.png",
   },
 ];
 
 export default function ServicesSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [activeCard, setActiveCard] = useState<number | null>(null);
-  const [tilt, setTilt] = useState<Record<number, { x: number; y: number }>>({});
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, idx: number) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -20;
-    setTilt(prev => ({ ...prev, [idx]: { x, y } }));
-  };
-
-  const handleMouseLeave = (idx: number) => {
-    setTilt(prev => ({ ...prev, [idx]: { x: 0, y: 0 } }));
-    setActiveCard(null);
-  };
 
   return (
-    <section ref={sectionRef} className="relative py-32 px-6 scene">
+    <section ref={sectionRef} className="relative py-32 scene" id="servicios">
+      
+      {/* Background container for cleaner separation */}
+      <div className="absolute inset-0 bg-black/[0.02] dark:bg-white/[0.01] pointer-events-none" />
+
       {/* Section header */}
-      <div className="text-center mb-20">
+      <div className="text-center mb-24 px-6 relative z-10">
         <div
-          className="inline-block glass neon-border rounded-full px-4 py-1.5 text-xs font-semibold tracking-widest uppercase mb-6"
-          style={{ color: "#6C63FF" }}
+          className="inline-block border border-accent/20 bg-accent/5 rounded-full px-4 py-1.5 text-xs font-semibold tracking-widest uppercase mb-6 shadow-sm"
+          style={{ color: "var(--accent-1)", borderColor: "var(--glass-border)" }}
         >
           Productos Híbridos
         </div>
         <h2
-          className="font-space font-black mb-4"
-          style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: 1.1 }}
+          className="font-space font-black mb-4 tracking-tight"
+          style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", lineHeight: 1.1 }}
         >
-          <span style={{ color: "#fff" }}>Ciencia con </span>
-          <span className="gradient-text">Alma</span>
+          Ciencia con <span className="gradient-text">Alma</span>
         </h2>
-        <p style={{ color: "rgba(255,255,255,0.45)", maxWidth: 520, margin: "0 auto", lineHeight: 1.7, fontSize: "1rem" }}>
-          La IA agiliza el proceso. La sensibilidad humana lo hace irresistible.
+        <p style={{ color: "var(--text-secondary)", maxWidth: 520, margin: "0 auto", lineHeight: 1.7, fontSize: "1rem" }}>
+          La inteligencia artificial escala el ritmo de análisis. La sensibilidad y empatía humana construyen el puente.
         </p>
       </div>
 
-      {/* Cards */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        {services.map((svc, i) => (
-          <div
-            key={i}
-            data-hover
-            className="relative overflow-hidden rounded-3xl p-8 cursor-none transition-all duration-300"
-            style={{
-              background: activeCard === i
-                ? `linear-gradient(135deg, rgba(${svc.color === "#6C63FF" ? "108,99,255" : svc.color === "#00D4FF" ? "0,212,255" : "255,107,157"},0.15) 0%, transparent 100%)`
-                : "rgba(255,255,255,0.03)",
-              border: `1px solid ${activeCard === i ? svc.color + "50" : "rgba(255,255,255,0.07)"}`,
-              transform: tilt[i]
-                ? `perspective(1000px) rotateX(${tilt[i].y}deg) rotateY(${tilt[i].x}deg) scale(1.02)`
-                : "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)",
-              boxShadow: activeCard === i ? `0 30px 60px ${svc.color}25` : "none",
-              transition: "transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease, border 0.3s ease",
-            }}
-            onMouseMove={e => handleMouseMove(e, i)}
-            onMouseEnter={() => setActiveCard(i)}
-            onMouseLeave={() => handleMouseLeave(i)}
-          >
-            {/* Glow dot top-right */}
-            <div
-              className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none"
-              style={{ background: `radial-gradient(circle, ${svc.color}20 0%, transparent 70%)`, transform: "translate(30%, -30%)" }}
-            />
+      {/* Elegant alternating sections without heavy cards */}
+      <div className="w-full relative z-10">
+        {services.map((svc, i) => {
+          const isEven = i % 2 === 0;
 
-            <div className="text-4xl mb-5">{svc.icon}</div>
-            <div
-              className="text-xs font-semibold tracking-widest uppercase mb-2"
-              style={{ color: svc.color }}
+          return (
+            <div 
+              key={i} 
+              className={`flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto px-6 py-20 lg:py-32 ${!isEven ? 'md:flex-row-reverse' : ''}`}
             >
-              {svc.tagline}
-            </div>
-            <h3 className="font-space font-bold text-xl mb-4" style={{ color: "#fff" }}>
-              {svc.title}
-            </h3>
-            <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.5)" }}>
-              {svc.description}
-            </p>
-            <div
-              className="text-xs font-semibold rounded-full px-4 py-2 inline-block"
-              style={{ background: svc.color + "20", color: svc.color }}
-            >
-              {svc.stats}
-            </div>
+              {/* Text Content */}
+              <div className="w-full md:w-5/12 mb-12 md:mb-0">
+                <div className="text-4xl mb-6 opacity-80">{svc.icon}</div>
+                <div
+                  className="text-xs font-bold tracking-[0.2em] uppercase mb-4"
+                  style={{ color: svc.color }}
+                >
+                  {svc.tagline}
+                </div>
+                <h3 className="font-space font-extrabold text-3xl mb-6 tracking-tight text-glow" style={{ color: "var(--text-primary)" }}>
+                  {svc.title}
+                </h3>
+                <p className="text-[1.05rem] leading-relaxed mb-8" style={{ color: "var(--text-secondary)" }}>
+                  {svc.description}
+                </p>
+                <div
+                  className="text-xs font-semibold rounded-full px-5 py-2.5 inline-block shadow-sm clean-border"
+                  style={{ background: "transparent", color: "var(--text-primary)" }}
+                >
+                  <span style={{ color: svc.color, marginRight: "4px" }}>✦</span> {svc.stats.replace('→', '')}
+                </div>
+              </div>
 
-            {/* Border gradient on active */}
-            {activeCard === i && (
-              <div
-                className="absolute inset-0 rounded-3xl pointer-events-none"
-                style={{ background: `linear-gradient(135deg, ${svc.color}15, transparent)`, zIndex: -1 }}
-              />
-            )}
-          </div>
-        ))}
+              {/* Graphic / Image */}
+              <div className="w-full md:w-1/2 relative flex justify-center items-center">
+                {/* Image blending strategy: 
+                    dark:mix-blend-screen drops black, keeps color and white
+                    but original has white background so mix-blend-multiply in light mode drops white and keeps color.
+                    In dark mode since background is white we use an invert filter maybe, or we just rely on screen/plus-lighter? 
+                    Wait, if background is white, screen will just look like a white box. 
+                    Best trick for dark mode: dark:mix-blend-difference or use a drop filter.
+                    Actually, since we generated with "light gray or white background" we use dark:invert dark:mix-blend-screen or dark:opacity-90 dark:mix-blend-lighten 
+                    Let's use dark:invert dark:hue-rotate-180 so it keeps its colors but background becomes black.
+                */}
+                <div className="relative w-full aspect-square max-w-[500px]">
+                  <Image 
+                    src={svc.image} 
+                    alt={svc.title}
+                    fill
+                    className="object-contain transition-transform duration-700 hover:scale-105 pointer-events-none mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180 dark:brightness-110"
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
