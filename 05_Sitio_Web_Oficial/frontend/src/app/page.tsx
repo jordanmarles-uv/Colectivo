@@ -1,3 +1,4 @@
+"use client";
 import ParticleCanvas from "@/components/ParticleCanvas";
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
