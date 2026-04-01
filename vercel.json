@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "cd 05_Sitio_Web_Oficial/frontend && npm run build",
   "devCommand": "cd 05_Sitio_Web_Oficial/frontend && npm run dev",
-  "installCommand": "cd 05_Sitio_Web_Oficial/frontend && npm install",
+  "installCommand": "cd 05_Sitio_Web_Oficial/frontend && npm install --legacy-peer-deps",
   "framework": "nextjs",
   "outputDirectory": "05_Sitio_Web_Oficial/frontend/.next"
 }
