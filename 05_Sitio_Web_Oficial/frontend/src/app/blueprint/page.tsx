@@ -2,450 +2,445 @@
 
 import React, { useState, useEffect } from 'react';
 
-// --- Reusable Components ---
+// --- Types ---
+type ContentBlock = {
+  type: 'h3' | 'h4' | 'p' | 'list' | 'quote' | 'alert' | 'code';
+  text?: string | React.ReactNode;
+  items?: string[] | React.ReactNode[];
+  alertType?: 'info' | 'warning' | 'success';
+};
 
+type DeepModule = {
+  id: string;
+  title: string;
+  icon: string;
+  summary: string;
+  stats: { label: string; val: string }[];
+  content: ContentBlock[];
+};
+
+// --- Data: The Mega Blueprint ---
+const modulesData: DeepModule[] = [
+  {
+    id: 'nucleo',
+    title: 'Núcleo & Ecosistema',
+    icon: '🏢',
+    summary: 'Focos CTeI del Valle, Startups NIDO y alianzas clave para el colectivo.',
+    stats: [
+      { label: 'Startups NIDO', val: '+300' },
+      { label: 'Focos CTeI', val: '7 Ejes' },
+      { label: 'Ubicación', val: 'Valle Central' }
+    ],
+    content: [
+      { type: 'h3', text: '1. Focos Estratégicos CTeI 2032 (Valle del Cauca)' },
+      { type: 'p', text: 'La política C+CTeI departamental condiciona la financiación de Regalías a 7 focos. Toda comunicación debe enmarcarse en estas vocaciones:' },
+      { type: 'list', items: ['Biodiversidad', 'Agropecuario-Agroindustrial', 'Servicios-Logística', 'Salud', 'Energía', 'Turismo', 'Educación'] },
+      { type: 'h3', text: '2. NIDO: Distrito de Innovación' },
+      { type: 'quote', text: 'Estrategia de Gobernación + Alcaldía + Cámara de Comercio (CCC) que apoya a +300 startups.' },
+      { type: 'p', text: 'Verticales priorizadas donde debemos buscar clientes:' },
+      { type: 'list', items: [
+          '**Salud / HealthTech:** Valley Care (Telemedicina, IA Médica, etc.).',
+          '**Economía Digital:** Clúster de productos digitales según la CCC.',
+          '**Fintech, Logística y Edtech:** Demandantes de dashboards y VC Decks.'
+      ]},
+      { type: 'h3', text: '3. Actores y Aliados de Prospección' },
+      { type: 'list', items: [
+        '**REDDI (Cali):** Centro de innovación para transferir hardware/software y conectar academia con empresa.',
+        '**Parquesoft Pacífico / Parquesoft TI:** Incubadora local de base tecnológica. Ruta crítica de acompañamiento a emprendedores.',
+        '**Zonamerica:** Sede franca para exportación de servicios Tech. Ideal para Decks en Inglés.',
+        '**Universidad del Valle (UV) / INCIVA:** El punto de entrada "Natural". Grupos de investigación e institutos que publican papers constantemente.'
+      ]}
+    ]
+  },
+  {
+    id: 'recursos',
+    title: 'Recursos & Estructura',
+    icon: '💻',
+    summary: 'Infraestructura tecnológica disponible y distribución de roles del equipo base a 2 personas.',
+    stats: [
+      { label: 'Fundadores', val: '2' },
+      { label: 'Renta', val: '$0' },
+      { label: 'Hardware', val: '5+ Eq.' }
+    ],
+    content: [
+      { type: 'h3', text: '1. Hardware Disponible' },
+      { type: 'alert', alertType: 'success', text: 'Financiamiento inicial bajo/cero externo operando bajo Bootstrapping. La ventaja radica en los equipos propios.' },
+      { type: 'list', items: [
+        'Portátil Asus A15 (Potencia de render / Modelado).',
+        'MacBook M2 (Diseño, UX/UI, optimización rápida).',
+        '2 Computadores de escritorio (Workstations fijas).',
+        'Cámara Nikon D5300 + Lentes + Flash (Fotografía y video corporativo).',
+        'iPad Pro (Ilustración digital, sketching en sitio).'
+      ]},
+      { type: 'h3', text: '2. Software & Stack' },
+      { type: 'p', text: 'Orientado a Open-Source y herramientas gratuitas/freemium para maximizar ROI:' },
+      { type: 'list', items: ['Figma (Diseño de Decks, UI/UX, One-Pagers).', 'Canva (Entregables rápidos y plantillas).', 'GIMP / DaVinci Resolve (Edición audiovisual gratuita pero Pro).', 'Next.js / WordPress (Soluciones Web y Scrollytelling).'] },
+      { type: 'h3', text: '3. Distribución de Roles' },
+      { type: 'list', items: [
+        '**Diseñadora Gráfica:** Identidad visual, diseño de infografías estáticas, branding y dirección de arte.',
+        '**Diseñador Multimedia/Web:** Animación 2D/3D corto, Scrollytelling web, código frontend, videos teaser.',
+        '**Administrativo (Compartido):** Gestión DIAN, cotizaciones, llamadas exploratorias (Prospección).'
+      ]}
+    ]
+  },
+  {
+    id: 'operacion',
+    title: 'Línea de Vida (12 Meses)',
+    icon: '🗓️',
+    summary: 'Roadmap de ejecución dividido en 4 fases desde la consolidación local hasta la retención de clientes B2B.',
+    stats: [
+      { label: 'Fases', val: '4' },
+      { label: 'Meta', val: '5-10 Clts' },
+      { label: 'Rotación', val: 'Mensual' }
+    ],
+    content: [
+      { type: 'h3', text: 'Fase 1: Lanzamiento y Base (Mes 0-1)' },
+      { type: 'list', items: [
+        'Definir naming corporativo y branding base del Colectivo.',
+        'Construir sitio web y perfiles clave (LinkedIn, Instagram).',
+        'Demos Ficticios 1: Crear un "One-Pager / Deck" falso para Salud (HealthTech).',
+        'Demos Ficticios 2: Rediseñar una noticia técnica de Univalle en una infografía interactiva.'
+      ]},
+      { type: 'h3', text: 'Fase 2: Enganche Inicial (Mes 1-3)' },
+      { type: 'list', items: [
+        'Tocar puertas internamente en Univalle. Ofrecer 2 tarifas "Piloto" con descuento a cambio de Testimonio + Caso de Éxito en Portafolio.',
+        'Asistir a foros de ciencia locales (INCIVA, Cámara Comercio).',
+        'Prospección pura vía LinkedIn mandando la "Plantilla Lean".'
+      ]},
+      { type: 'h3', text: 'Fase 3: Calibración y Venta (Mes 3-6)' },
+      { type: 'list', items: [
+        'Ajuste del Tracking Temporal: Revisar si la Infografía tomó 20 horas o 40 y ajustar la tarifa base.',
+        'Cazar convocatorias locales (MinCiencias) o fondos NIDO buscando fungir como "Proveedor Transversal" de los ganadores.',
+        'Consolidar la contabilidad y emisión de E-Factura real DIAN.'
+      ]},
+      { type: 'h3', text: 'Fase 4: Expansión Modulada (Mes 6-12)' },
+      { type: 'list', items: [
+        'Alcanzar cartera recurrente de 5 a 10 clientes (Laboratorios, ONGs, Startups).',
+        'Si la demanda lo permite, tercerizar el desarrollo pesado en Upwork/Workana o sumar E-Learning y Podcasts densos.'
+      ]}
+    ]
+  },
+  {
+    id: 'comercial',
+    title: 'Finanzas & Ventas Lean',
+    icon: '💵',
+    summary: 'Fórmula central del tarifario por hora. Empaquetamiento de servicios y estrategia de prospección en frío vía LinkedIn.',
+    stats: [
+      { label: 'H/Base', val: '~$25k COP' },
+      { label: 'Mensaje', val: 'Soft-Sell' },
+      { label: 'Paquetes', val: '3 Niveles' }
+    ],
+    content: [
+      { type: 'h3', text: '1. Tarifas y Costos ("Hora Hombre")' },
+      { type: 'p', text: 'La fórmula base de subsistencia recomendada por la industria es:' },
+      { type: 'code', text: '(Costos Fijos Operativos + Ingreso Neto Deseado) / 160 horas al mes' },
+      { type: 'alert', alertType: 'info', text: 'Ejemplo: Si buscan $3M COP entre ambos y los costos fijos (luz, software) son $1M, el requerimiento es recaudar $4M. Si trabajan 160h productivas conjuntas, la hora mínima es $25.000 COP. Recomendado cobrar entre $25.000 a $50.000 COP según el bulto técnico de la ciencia.' },
+      { type: 'h3', text: '2. Empaquetamiento de Servicios' },
+      { type: 'list', items: [
+        '**Paquete Básico (Visión General):** ~20 horas. Infografía base o Deck simple. $500k a $1M.',
+        '**Paquete Estándar (Multi-plataforma):** ~50 horas. Web sencilla, short video + redes. $1.5M a $2.5M.',
+        '**Paquete Pro (Transmedia DeepTech):** ~100+ horas. Micrositio complejo, scrollytelling animado, dashboards BI. A convenir ($3M+).'
+      ]},
+      { type: 'h3', text: '3. Prospección Inbound/Outbound (The "Soft-Sell")' },
+      { type: 'alert', alertType: 'warning', text: 'JAMÁS enviar PDF institucionales inmensos en el primer mensaje. La clave es el "Short and Sweet". Observar papers locales antes de hablar.' },
+      { type: 'p', text: 'Plantilla base de contacto por email / LinkedIn:' },
+      { type: 'quote', text: '"Estimado/a Dr/a. [Nombre], le escribo porque me llamó la atención su reciente proyecto sobre [Tema de Paper]. Creemos fundamental que investigaciones de este nivel crucen la barrera académica. Somos [Colectivo], especialistas en visualización de ciencia densa de forma transmedia y dinámica. ¿Tendría 10 minutos la próxima semana para una charlar online exploratoria sobre cómo un "Interactive Deck" o un "One-Pager" podría potenciar su difusión de resultados? Saludos cordiales."' }
+    ]
+  },
+  {
+    id: 'legal',
+    title: 'Blindaje Jurídico',
+    icon: '⚖️',
+    summary: 'Marco normativo en Colombia (DIAN: topes UVT e ISR) más la estructura base contractual de Derechos Morales vs Patrimoniales ante la DNDA.',
+    stats: [
+      { label: 'Tope UVT', val: '3.500/4.000' },
+      { label: 'Regla', val: 'F. Electrón' },
+      { label: 'Autoría', val: 'Inalienable' }
+    ],
+    content: [
+      { type: 'h3', text: '1. Tributación - No Responsable de IVA' },
+      { type: 'list', items: [
+        '**Tope General (2025):** 3.500 UVT anuales. Aprox ~174 Millones de pesos.',
+        '**Tope Gubernamental:** 4.000 UVT (~199 Millones COP) *SI Y SÓLO SI* todos los ingresos provienen exclusivamente de entidades del Estado. Si hay mezcla privada, aplica el de 3.5k.',
+        '**Facturación B2B:** Es obligatorio registrarse (incluso gratis en módulo DIAN) para expedir *Factura Electrónica* a Univalle, Gobiernos y Startups. Se factura indicando "Sin IVA causado".'
+      ]},
+      { type: 'h3', text: '2. Régimen de Derechos Autor (Ley 23 de 1982 - DNDA)' },
+      { type: 'alert', alertType: 'warning', text: 'Siempre incluir anexo de términos en todos los tratos con universidades públicas para evitar apropiaciones indebidas.' },
+      { type: 'h4', text: 'Derechos Morales (Del Creador)' },
+      { type: 'p', text: 'Irrenunciables, inembargables e imprescriptibles. Exige visibilidad de la firma. Ej: "Visualización e Interacción Transmedia por [Colectivo]".' },
+      { type: 'h4', text: 'Derechos Patrimoniales (Del Cliente)' },
+      { type: 'p', text: 'Se CEDEN mediante contrato comercial (reproducción y distribución). El cliente es dueño del producto entregado para usarlo institucionalmente.' },
+      { type: 'h4', text: 'Exhibición en Portafolio' },
+      { type: 'p', text: 'Por ley, el autor siempre puede mostrar su obra alegando paternidad, a menos que exista un NDA (Non-Disclosure Agreement) firmado explicitamente por protección de datos secretos (patentes/datos de testeo cerrados).' }
+    ]
+  },
+  {
+    id: 'transmedia',
+    title: 'Formatos Deep Tech 2026',
+    icon: '🎬',
+    summary: 'Los "Entregables". Decks, Dashboards y Scrollytelling orientados al estándar mundial de inversión de capital de riesgo (VC).',
+    stats: [
+      { label: 'A. Tiempo', val: '< 2 Mins' },
+      { label: 'Técnica', val: 'Scrolly' },
+      { label: 'UX', val: 'Dashboard' }
+    ],
+    content: [
+      { type: 'h3', text: 'El Mandamiento: "Short and Sweet"' },
+      { type: 'p', text: 'En 2024-2026, los inversores le dedican en promedio MENOS de 2 minutos a cada Pitch Deck (TechCrunch). Reportes estáticos de 50 páginas están muertos para la prospección.' },
+      { type: 'h3', text: 'Catálogo de Formatos Estrella' },
+      { type: 'list', items: [
+        '**One-Pagers de Inversión:** 1 a 2 páginas con extrema carga infográfica. Condensa: Problema > Solución > Mercado > KPI > Equipo.',
+        '**Scrollytelling:** Sitios web inmersivos donde la animación base 3D/2D y los textos van apareciendo al ritmo del _scroll_ del mouse. Ideal para historias de biodiversidad o logística.',
+        '**Pitches Modulares:** 10-15 slides audaces de extrema lectura (Fuentes gigantes). Los datos microscópicos se mandan a un Anexo "Data Room".',
+        '**Paneles Interactivos (Dashboards):** Usando librerías (ej. React/Highcharts) para que los financiadores comparen filtros de impacto social/Científico en vivo.',
+        '**Podcasts/Audio-Cápsulas:** Para apropiación social del conocimiento asíncrono en movilidad.',
+        '**Teaser Videos (Explainer Animado):** Videos crudos hiperkinéticos de 60 a 90 segundos que resumen patentes biomédicas. Ideales para landing pages.'
+      ]}
+    ]
+  }
+];
+
+// --- Sub-components ---
 const Badge = ({ children, color = 'var(--accent-1)' }: { children: React.ReactNode, color?: string }) => (
-  <span className="px-3 py-1 rounded-full glass text-[10px] font-black tracking-widest uppercase border border-opacity-20" style={{ color, borderColor: color }}>
+  <span className="px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border" 
+        style={{ color, borderColor: color, backgroundColor: `${color}10` }}>
     {children}
   </span>
 );
 
-const Accordion = ({ title, children, icon }: { title: string, children: React.ReactNode, icon?: string }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div className={`glass rounded-2xl mb-4 transition-all duration-300 overflow-hidden ${isOpen ? 'ring-2 ring-[var(--accent-1)] ring-opacity-30' : ''}`}>
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-5 flex justify-between items-center text-left hover:bg-white hover:bg-opacity-5 transition-colors"
-      >
-        <div className="flex items-center gap-4">
-          {icon && <span className="text-xl">{icon}</span>}
-          <span className="font-bold font-[var(--font-space)] text-lg">{title}</span>
+const BlockRenderer = ({ block }: { block: ContentBlock }) => {
+  switch (block.type) {
+    case 'h3':
+      return <h3 className="text-2xl font-black font-[var(--font-space)] mt-8 mb-4 tracking-tighter text-[var(--text-primary)]">{block.text}</h3>;
+    case 'h4':
+      return <h4 className="text-xl font-bold font-[var(--font-space)] mt-6 mb-3 text-[var(--accent-1)]">{block.text}</h4>;
+    case 'p':
+      return <p className="text-sm leading-loose mb-4 opacity-80">{block.text}</p>;
+    case 'quote':
+      return <blockquote className="border-l-4 border-[var(--accent-1)] pl-4 py-2 my-6 text-sm italic opacity-90 bg-[var(--accent-1)]/5 rounded-r-lg">{block.text}</blockquote>;
+    case 'code':
+      return <div className="bg-[#0f172a] text-emerald-400 p-4 rounded-xl font-mono text-xs overflow-x-auto my-4 border border-[var(--border-subtle)] shadow-inner">{block.text}</div>;
+    case 'alert':
+      const colors = block.alertType === 'warning' ? 'text-amber-500 bg-amber-500/10 border-amber-500/30' : 
+                     block.alertType === 'success' ? 'text-emerald-500 bg-emerald-500/10 border-emerald-500/30' : 
+                     'text-blue-400 bg-blue-500/10 border-blue-500/30';
+      return (
+        <div className={`p-4 rounded-xl text-sm font-medium border my-4 ${colors}`}>
+          <span className="font-bold mr-2">OJO:</span>{block.text}
         </div>
-        <span className={`transform transition-transform duration-300 text-[var(--accent-1)] font-bold text-xl ${isOpen ? 'rotate-180' : ''}`}>
-          ↓
-        </span>
-      </button>
-      <div className={`transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[2000px] opacity-100 p-6 pt-0' : 'max-h-0 opacity-0'}`}>
-        <div className="h-px bg-[var(--border-subtle)] mb-6" />
-        <div className="text-[var(--text-secondary)] text-sm leading-relaxed space-y-4">
-          {children}
+      );
+    case 'list':
+      return (
+        <ul className="space-y-4 my-4 opacity-80">
+          {block.items?.map((item: any, i) => {
+            // Very simple parser for bolding
+            let content = item;
+            if (typeof item === 'string') {
+              const parts = item.split('**');
+              content = parts.map((part, index) => index % 2 === 1 ? <strong key={index} className="text-[var(--text-primary)] dark:text-white font-black">{part}</strong> : part);
+            }
+            return (
+              <li key={i} className="flex items-start text-sm leading-relaxed">
+                <span className="text-[var(--accent-1)] mr-3 mt-1 text-[10px] items-center block">◆</span>
+                <span>{content}</span>
+              </li>
+            );
+          })}
+        </ul>
+      );
+    default: return null;
+  }
+};
+
+const Drawer = ({ 
+  isOpen, 
+  onClose, 
+  module 
+}: { 
+  isOpen: boolean, 
+  onClose: () => void, 
+  module: DeepModule | null 
+}) => {
+  if (!isOpen || !module) return null;
+
+  return (
+    <>
+      <div 
+        className="fixed inset-0 bg-black/50 backdrop-blur-md z-[100] transition-opacity duration-300"
+        onClick={onClose}
+      />
+      <div 
+        className={`fixed top-0 right-0 h-full w-full w-full max-w-2xl bg-[var(--bg-primary)] z-[110] shadow-2xl border-l border-[var(--border-subtle)] overflow-y-auto custom-scrollbar transform transition-transform duration-300 ease-out`}
+        style={{ transform: isOpen ? 'translateX(0)' : 'translateX(100%)' }}
+      >
+        {/* Header Drawer */}
+        <div className="sticky top-0 glass z-10 px-8 py-6 border-b border-[var(--border-subtle)] flex items-center justify-between">
+          <div className="flex items-center gap-4">
+             <span className="text-4xl text-[var(--accent-1)]">{module.icon}</span>
+             <div>
+               <p className="text-[10px] uppercase font-black tracking-widest text-[var(--accent-1)]">Blueprint Deep-Dive</p>
+               <h2 className="text-2xl font-black font-[var(--font-space)] tracking-tight">{module.title}</h2>
+             </div>
+          </div>
+          <button 
+            onClick={onClose}
+            className="w-12 h-12 flex flex-col items-center justify-center gap-1.5 rounded-2xl glass hover:bg-[var(--accent-1)] hover:text-white transition-all group"
+          >
+             <span className="w-5 h-0.5 bg-current transform rotate-45 translate-y-[3px] group-hover:bg-white" />
+             <span className="w-5 h-0.5 bg-current transform -rotate-45 -translate-y-[5px] group-hover:bg-white" />
+          </button>
+        </div>
+
+        {/* Content Drawer */}
+        <div className="px-8 py-10 pb-32">
+          {module.content.map((block, idx) => (
+             <BlockRenderer key={idx} block={block} />
+          ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-const Modal = ({ isOpen, onClose, title, children }: { isOpen: boolean, onClose: () => void, title: string, children: React.ReactNode }) => {
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="glass w-full max-w-2xl max-h-[85vh] rounded-[2.5rem] shadow-2xl relative z-10 flex flex-col overflow-hidden border-t-4 border-t-[var(--accent-1)]">
-        <div className="p-8 flex justify-between items-center border-b border-[var(--border-subtle)]">
-          <h3 className="text-2xl font-black font-[var(--font-space)]">{title}</h3>
-          <button onClick={onClose} className="w-10 h-10 rounded-full glass flex items-center justify-center font-bold hover:scale-110 transition-transform">×</button>
-        </div>
-        <div className="p-8 overflow-y-auto custom-scrollbar space-y-6 text-[var(--text-secondary)]">
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // --- Main Page ---
 
-export default function BlueprintPage() {
-  const [activeSection, setActiveSection] = useState('resumen');
-  const [modalContent, setModalContent] = useState<{title: string, content: React.ReactNode} | null>(null);
+export default function MegaBlueprintPage() {
+  const [activeModule, setActiveModule] = useState<DeepModule | null>(null);
 
-  const sections = [
-    { id: 'resumen', title: 'Resumen Ejecutivo', icon: '📋' },
-    { id: 'ecosistema', title: 'Ecosistema local', icon: '🌐' },
-    { id: 'operacion', title: 'Plan Detallado', icon: '⚙️' },
-    { id: 'legal', title: 'Marco Jurídico', icon: '⚖️' },
-    { id: 'transmedia', title: 'Formatos 2026', icon: '🎬' },
-    { id: 'modelo', title: 'Negocio & Precios', icon: '💎' },
-  ];
-
+  // Lock body scroll when drawer is open
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200;
-      for (const section of sections) {
-        const element = document.getElementById(section.id);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section.id);
-          }
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollTo = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      window.scrollTo({ top: element.offsetTop - 80, behavior: 'smooth' });
-    }
-  };
+    if (activeModule) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; }
+  }, [activeModule]);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] font-sans selection:bg-[var(--accent-1)] selection:text-white">
-      <div className="fixed inset-0 grid-overlay opacity-20 pointer-events-none" />
-      
-      {/* Sidebar Navigation */}
-      <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-50 hidden xl:flex flex-col gap-4">
-        {sections.map((section) => (
-          <button
-            key={section.id}
-            onClick={() => scrollTo(section.id)}
-            className={`group flex items-center gap-4 transition-all duration-500 ${activeSection === section.id ? 'translate-x-2' : ''}`}
-          >
-            <span className={`w-12 h-12 rounded-2xl glass flex items-center justify-center text-xl transition-all duration-500 shadow-lg ${
-              activeSection === section.id ? 'scale-110 border-[var(--accent-1)] text-[var(--accent-1)] bg-[var(--accent-1)]/10 ring-4 ring-[var(--accent-1)]/10' : 'opacity-40 grayscale'
-            }`}>
-              {section.icon}
-            </span>
-            <div className={`flex flex-col items-start transition-all duration-500 ${activeSection === section.id ? 'opacity-100' : 'opacity-0 -translate-x-4 pointer-events-none'}`}>
-               <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent-1)]">Blueprint</span>
-               <span className="text-sm font-bold font-[var(--font-space)] whitespace-nowrap">{section.title}</span>
-            </div>
-          </button>
-        ))}
-      </nav>
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] font-sans relative overflow-x-hidden">
+      <div className="fixed inset-0 grid-overlay opacity-[0.15] pointer-events-none z-0" />
+      <div className="fixed top-0 inset-x-0 h-[400px] bg-gradient-to-b from-[var(--accent-1)]/5 to-transparent pointer-events-none z-0" />
 
-      {/* Modal Root */}
-      <Modal 
-        isOpen={!!modalContent} 
-        onClose={() => setModalContent(null)} 
-        title={modalContent?.title || ''}
-      >
-        {modalContent?.content}
-      </Modal>
+      {/* Hero Header */}
+      <header className="relative z-10 pt-32 pb-20 px-6 max-w-7xl mx-auto text-center border-b border-[var(--border-subtle)] border-opacity-30">
+        <div className="inline-flex glass px-4 py-2 rounded-full mb-8 items-center gap-3 border-[var(--accent-1)]/30">
+           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+           <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80">Arquitectura Maestra 2024-2026</span>
+        </div>
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black font-[var(--font-space)] tracking-tighter leading-[0.85] uppercase mb-8">
+          The <span className="text-transparent bg-clip-text bg-gradient-to-br from-[var(--text-primary)] via-[var(--accent-1)] to-[var(--accent-2)]">Mega</span> Plan.
+        </h1>
+        <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto font-medium leading-relaxed mb-12">
+          La central integral de conocimiento operativo, investigativo y jurídico del Colectivo de Comunicación Científica Transmedia. Todo condensado en 6 macro-nodos.
+        </p>
+      </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-24 relative">
-        <header className="mb-32 text-center">
-          <Badge color="var(--accent-1)">Estrategia Colectivo 2024-2026</Badge>
-          <h1 className="text-7xl md:text-9xl font-black mt-8 mb-10 font-[var(--font-space)] tracking-tighter leading-[0.85]">
-            THE <span className="gradient-text">DOCS</span>
-          </h1>
-          <p className="text-xl text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed font-medium">
-            Arquitectura completa del colectivo. Desde el marco legal de la DIAN hasta la estrategia de prospección en el Valle.
-          </p>
-        </header>
-
-        {/* 📋 SECTION: RESUMEN */}
-        <section id="resumen" className="mb-48 scroll-mt-24">
-          <div className="flex justify-between items-end mb-12">
-            <div>
-              <Badge color="var(--accent-1)">01. Visión</Badge>
-              <h2 className="text-5xl font-black font-[var(--font-space)] mt-4">Resumen Ejecutivo</h2>
-            </div>
-            <button 
-              onClick={() => setModalContent({
-                title: "Resumen Profundo",
-                content: (
-                  <div className="space-y-4">
-                    <p>El Valle del Cauca alinea su política C+CTeI en siete focos (Biodiversidad, Agroindustria, Salud, etc.), creando demanda de comunicación científica.</p>
-                    <p>Estrategia NIDO ha apoyado +300 startups tech (2024-2025). Operamos como persona natural no responsable de IVA (ingresos &lt; 3.500-4.000 UVT).</p>
-                    <p>Se priorizan formatos breves (One-pagers, Scrollytelling) frente a reportes aburridos.</p>
-                    <div className="p-4 bg-[var(--accent-1)]/5 rounded-xl border border-[var(--accent-1)]/20">
-                       <h5 className="font-bold mb-2">Clave Jurídica:</h5>
-                       <p className="text-xs italic">Los derechos morales son inalienables (Ley 23). Conservamos co-autoría moral siempre.</p>
-                    </div>
-                  </div>
-                )
-              })}
-              className="text-xs font-bold uppercase tracking-widest text-[var(--accent-1)] hover:underline"
-            > + Expandir Resumen</button>
-          </div>
-          
-          <div className="glass p-12 rounded-[3.5rem] relative overflow-hidden group border-t-2 border-t-white dark:border-t-white/10">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-[var(--accent-1)] opacity-10 blur-[80px] rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="text-2xl font-medium leading-relaxed mb-8">
-              "Transformamos ciencia <span className="text-[var(--accent-1)] font-black">densa</span> en narrativas <span className="text-[var(--accent-1)] font-black">ligeras</span> que conquistan fondos e inversores."
-            </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-               {[
-                 { label: 'Ingresos', val: '< 3.5k UVT', icon: '💰' },
-                 { label: 'Estatus', icon: '🚀', val: 'Bootstrapping' },
-                 { label: 'Derecho', icon: '⚖️', val: 'Co-autoría' },
-                 { label: 'Foco', icon: '📍', val: 'Cali / Valle' }
-               ].map(stat => (
-                 <div key={stat.label} className="text-center p-4 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-subtle)]">
-                   <div className="text-xl mb-1">{stat.icon}</div>
-                   <div className="text-[10px] font-bold uppercase opacity-50 tracking-tighter">{stat.label}</div>
-                   <div className="text-sm font-black">{stat.val}</div>
+      {/* Main Grid Selector */}
+      <main className="relative z-10 py-24 px-6 max-w-7xl mx-auto">
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {modulesData.map((mod) => (
+              <div 
+                key={mod.id}
+                onClick={() => setActiveModule(mod)}
+                className="group relative glass rounded-[2.5rem] p-8 hover:-translate-y-4 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden border-2 border-transparent hover:border-[var(--accent-1)]/30 flex flex-col h-full bg-white/40 dark:bg-[#080d1e]/80"
+              >
+                 <div className="absolute -top-20 -right-20 w-40 h-40 bg-[var(--accent-1)]/10 blur-[50px] rounded-full group-hover:bg-[var(--accent-1)]/30 transition-all duration-700" />
+                 
+                 <div className="flex justify-between items-start mb-10 relative z-10">
+                    <span className="text-5xl lg:text-6xl grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 drop-shadow-md">{mod.icon}</span>
+                    <button className="w-10 h-10 rounded-full glass flex items-center justify-center font-bold text-[var(--accent-1)] group-hover:bg-[var(--accent-1)] group-hover:text-white transition-colors duration-300">
+                      →
+                    </button>
                  </div>
-               ))}
-            </div>
-          </div>
-        </section>
 
-        {/* 🌐 SECTION: ECOSISTEMA */}
-        <section id="ecosistema" className="mb-48 scroll-mt-24">
-          <div className="mb-12">
-            <Badge color="var(--accent-2)">02. Localización</Badge>
-            <h2 className="text-5xl font-black font-[var(--font-space)] mt-4">Ecosistema Valle</h2>
-          </div>
-          
-          <div className="grid gap-6">
-            <Accordion title="Estrategia NIDO & Verticales" icon="🏢">
-               <p>Distrito de Innovación e IA del Valle (Gobernación + Alcaldía + CCC). +300 startups apoyadas.</p>
-               <div className="grid grid-cols-2 gap-4 mt-4">
-                  <div className="p-4 glass rounded-xl border-l-4 border-l-[var(--accent-2)]">
-                     <p className="font-bold text-[var(--accent-2)]">Valley Care</p>
-                     <p className="text-xs">Foco en HealthTech, telemedicina e IA médica.</p>
-                  </div>
-                  <div className="p-4 glass rounded-xl border-l-4 border-l-[var(--accent-1)]">
-                     <p className="font-bold text-[var(--accent-1)]">Economía Digital</p>
-                     <p className="text-xs">Clúster de la CCC para servicios pro y tech.</p>
-                  </div>
-               </div>
-            </Accordion>
+                 <div className="relative z-10 flex-grow">
+                    <h3 className="text-2xl font-black font-[var(--font-space)] leading-tight tracking-tight mb-4 group-hover:text-[var(--accent-1)] transition-colors">{mod.title}</h3>
+                    <p className="text-sm opacity-60 leading-relaxed mb-8">{mod.summary}</p>
+                 </div>
+
+                 {/* Mini Stats Bar */}
+                 <div className="relative z-10 grid grid-cols-3 gap-2 py-4 border-t border-[var(--border-subtle)] mt-auto">
+                    {mod.stats.map(s => (
+                      <div key={s.label}>
+                         <p className="text-[9px] uppercase font-black opacity-40 tracking-widest truncate">{s.label}</p>
+                         <p className="text-xs font-bold mt-1 text-[var(--text-primary)]">{s.val}</p>
+                      </div>
+                    ))}
+                 </div>
+              </div>
+            ))}
+         </div>
+
+         {/* Launch Checklist */}
+         <div className="mt-32 max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+               <Badge color="var(--accent-3)">Misión Crítica</Badge>
+               <h2 className="text-5xl font-black font-[var(--font-space)] mt-6 tracking-tight">Checklist de Lanzamiento</h2>
+            </div>
             
-            <Accordion title="Aliados & Incubadoras" icon="🤝">
-               <div className="space-y-4">
-                  <div>
-                    <strong className="text-[var(--text-primary)]">REDDI:</strong> Centro de innovación de la Cámara de Comercio. Misión: comercializar tecnologías y conectar academia con empresa.
-                  </div>
-                  <div>
-                    <strong className="text-[var(--text-primary)]">Parquesoft Pacífico:</strong> Incubadora de impacto social y tech. Ruta de acompañamiento a emprendedores.
-                  </div>
-                  <div>
-                    <strong className="text-[var(--text-primary)]">Zonamerica:</strong> Zona franca de servicios globales. Ideal para exportadores de ciencia.
-                  </div>
-               </div>
-            </Accordion>
-            
-            <Accordion title="Focos Estratégicos CTeI 2032" icon="📍">
-               <div className="flex flex-wrap gap-2">
-                 {['Biodiversidad', 'Agropecuario', 'Servicios', 'Salud', 'Energía', 'Turismo', 'Educación'].map(f => (
-                   <span key={f} className="px-4 py-2 rounded-xl glass text-xs font-bold">{f}</span>
+            <div className="glass p-10 md:p-16 rounded-[3rem] shadow-xl border-t-8 border-t-[var(--accent-3)]">
+               <ul className="space-y-6">
+                 {[
+                   { label: 'Identidad', req: 'Definir nombre / branding base.' },
+                   { label: 'Producto', req: 'Crear los Demos Ficticios (HealthTech & Univalle Data).' },
+                   { label: 'Legal', req: 'RUT actualizado + Alta en Factura Electrónica (Gratuita).' },
+                   { label: 'Comercial', req: 'Portafolio Web Básico en el aire.' },
+                   { label: 'Prospección', req: 'Primer acercamiento de prueba a un grupo Univ. Valle.' }
+                 ].map((chk, i) => (
+                   <li key={chk.label} className="group flex items-start gap-6 p-4 rounded-2xl hover:bg-white/5 transition-colors">
+                     <div className="w-8 h-8 shrink-0 rounded-lg border-2 border-[var(--accent-3)] flex items-center justify-center mt-1 group-hover:bg-[var(--accent-3)] transition-colors">
+                        <span className="w-3 h-3 bg-transparent group-hover:bg-white transition-colors rotate-45 transform" />
+                     </div>
+                     <div>
+                       <span className="block text-xs font-black tracking-widest uppercase opacity-50 mb-1">{chk.label}</span>
+                       <span className="text-sm md:text-base font-medium opacity-90 leading-relaxed">{chk.req}</span>
+                     </div>
+                   </li>
                  ))}
-               </div>
-               <p className="mt-4 italic text-xs opacity-60">Estos focos determinan qué proyectos reciben financiación de Regalías en el Valle.</p>
-            </Accordion>
-          </div>
-        </section>
-
-        {/* ⚙️ SECTION: OPERACION */}
-        <section id="operacion" className="mb-48 scroll-mt-24">
-          <div className="mb-12">
-            <Badge color="var(--accent-3)">03. Ejecución</Badge>
-            <h2 className="text-5xl font-black font-[var(--font-space)] mt-4">Plan Operativo</h2>
-          </div>
-
-          <div className="space-y-12">
-             {[
-               { id: 'f1', time: 'Mes 1', title: 'Fundación & Portafolio', content: 'Definir branding, crear 3 proyectos ficticios y web base.', list: ['Branding Colectivo', 'Demo HealthTech', 'Web "One-Page"'] },
-               { id: 'f2', time: 'Mes 1-3', title: 'Enganche Regional', desc: 'Contactar grupos Univalle y participar en Demo Days de NIDO.', list: ['Pilotos en UV', 'Redes Sociales', 'Pitch Comercial'] },
-               { id: 'f3', time: 'Mes 3-6', title: 'Venta Recurrente', desc: 'Consolidar precios por hora y buscar fondos de Minciencias.', list: ['Ajuste Tarifario', 'Convocatorias I+D', 'Registro Propiedad'] }
-             ].map((f, i) => (
-               <div key={f.id} className="group relative flex gap-8">
-                  <div className="w-12 h-12 rounded-2xl glass border-2 border-[var(--border-subtle)] flex items-center justify-center font-black group-hover:border-[var(--accent-1)] transition-colors text-xs">{i+1}</div>
-                  <div className="flex-1 glass p-8 rounded-[2.5rem] border-l-8 border-l-[var(--accent-1)] transition-all group-hover:shadow-xl">
-                     <span className="text-[10px] font-black tracking-widest text-[var(--accent-1)] uppercase">{f.time}</span>
-                     <h4 className="text-2xl font-black font-[var(--font-space)] mt-2 mb-4">{f.title}</h4>
-                     <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {f.list.map(l => (
-                          <li key={l} className="flex items-center gap-2 text-xs font-bold opacity-60">
-                             <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-1)]" /> {l}
-                          </li>
-                        ))}
-                     </ul>
-                  </div>
-               </div>
-             ))}
-          </div>
-        </section>
-
-        {/* ⚖️ SECTION: LEGAL */}
-        <section id="legal" className="mb-48 scroll-mt-24">
-          <div className="mb-12 flex justify-between items-end">
-            <div>
-              <Badge color="var(--accent-1)">04. Blindaje</Badge>
-              <h2 className="text-5xl font-black font-[var(--font-space)] mt-4">Persona Natural & Ley</h2>
-            </div>
-            <button 
-              onClick={() => setModalContent({
-                title: "Detalles Tributarios DIAN",
-                content: (
-                  <div className="space-y-4">
-                    <h5 className="font-bold text-[var(--accent-3)]">No Responsable de IVA 2025</h5>
-                    <ul className="list-disc pl-5 space-y-2 text-sm italic">
-                      <li>Tope 3.500 UVT: ~$174,000,000 COP anuales.</li>
-                      <li>Tope 4.000 UVT (100% Estado): ~$199,000,000 COP anuales.</li>
-                      <li>Obligatoriedad: Factura Electrónica Validada por la DIAN para B2B.</li>
-                    </ul>
-                  </div>
-                )
-              })}
-              className="text-xs font-bold uppercase tracking-widest text-[var(--accent-3)] hover:underline"
-            > + Ver Topes Exactos</button>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="glass p-10 rounded-[3rem] bg-opacity-5 border-2 border-[var(--accent-1)]">
-               <h3 className="text-xl font-black mb-6 flex items-center gap-3">
-                 <span className="text-2xl">✒️</span> Derechos de Autor
-               </h3>
-               <p className="text-sm leading-relaxed mb-6">
-                 Basado en la <strong>Ley 23 de 1982</strong>. El derecho de autor en Colombia se divide en dos:
-               </p>
-               <Accordion title="Derechos Morales" icon="🧠">
-                  <p>Inalienables, irrenunciables, perpetuos. Paternidad e integridad de la obra. El nombre del Colectivo debe figurar siempre.</p>
-               </Accordion>
-               <Accordion title="Derechos Patrimoniales" icon="💵">
-                  <p>Cedibles mediante contrato. Permiten al cliente (Universidad/Startup) explotar la obra. Se ceden para uso institucional/comercial limitado.</p>
-               </Accordion>
-            </div>
-            
-            <div className="glass p-10 rounded-[3rem] border-2 border-[var(--accent-3)]">
-               <h3 className="text-xl font-black mb-6 flex items-center gap-3">
-                 <span className="text-2xl">🧾</span> Facturación Electrónica
-               </h3>
-               <p className="text-sm leading-relaxed mb-6">
-                 Indispensable para cobrar a Universidades y Startups formalizadas.
-               </p>
-               <ul className="space-y-4">
-                  {[
-                    'Habilitarse en el servicio gratuito de la DIAN.',
-                    'Facturar "Sin IVA causado" (como No Responsable).',
-                    'Soporte fiscal exigido por B2B.',
-                    'Actualización obligatoria RUT cada año.'
-                  ].map(t => (
-                    <li key={t} className="flex gap-4 text-xs font-bold opacity-70">
-                       <span className="text-[var(--accent-3)]">●</span> {t}
-                    </li>
-                  ))}
                </ul>
             </div>
-          </div>
-        </section>
-
-        {/* 🎬 SECTION: TRANSMEDIA */}
-        <section id="transmedia" className="mb-48 scroll-mt-24">
-          <div className="mb-12">
-            <Badge color="var(--accent-2)">05. Producto</Badge>
-            <h2 className="text-5xl font-black font-[var(--font-space)] mt-4">Formatos de Impacto</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-             {[
-               { t: 'One-Pagers', icon: '📄', desc: 'Resumen ultra-visual para inversores con poco tiempo (VC).', btn: 'Ver Estándares' },
-               { t: 'Scrollytelling', icon: '🖱️', desc: 'Narrativa interactiva web de desplazamiento continuo.', btn: 'Ver Técnica' },
-               { t: 'Video Teasers', icon: '🎥', desc: 'Clips de 90s tipo elevator pitch visual.', btn: 'Plan de Motion' },
-               { t: 'Data Rooms', icon: '💎', desc: 'Repositorios visuales de evidencia científica densa.', btn: 'Ver Jerarquías' },
-               { t: 'Dashboards', icon: '📊', desc: 'Paneles BI para métricas de impacto científico.', btn: 'Ver Visualización' },
-               { t: 'Pods Narrativos', icon: '🎙️', desc: 'Cápsulas de audio sobre impacto científico regional.', btn: 'Ver Guión' }
-             ].map(item => (
-               <div key={item.t} className="glass p-8 rounded-[2.5rem] hover:-translate-y-4 transition-all duration-500 border-t-4 border-t-[var(--accent-1)] group">
-                  <div className="text-5xl mb-6 grayscale group-hover:grayscale-0 transition-all">{item.icon}</div>
-                  <h5 className="text-xl font-black font-[var(--font-space)] mb-4">{item.t}</h5>
-                  <p className="text-xs text-[var(--text-secondary)] mb-6 leading-relaxed">{item.desc}</p>
-                  <button 
-                    onClick={() => setModalContent({ title: item.t, content: <p>Nuestros estándares de {item.t} para 2026 priorizan la velocidad de carga, la accesibilidad móvil y el uso de fuentes modernas como Inter. El tiempo promedio de consumo debe ser inferior a 3 minutos.</p> })}
-                    className="w-full py-3 rounded-2xl glass text-[10px] font-black uppercase tracking-widest hover:bg-[var(--accent-1)] hover:text-white transition-colors"
-                  >
-                    Detalles
-                  </button>
-               </div>
-             ))}
-          </div>
-        </section>
-
-        {/* 💎 SECTION: MODELO */}
-        <section id="modelo" className="mb-48 scroll-mt-24">
-          <div className="mb-12">
-            <Badge color="var(--accent-1)">06. Rentabilidad</Badge>
-            <h2 className="text-5xl font-black font-[var(--font-space)] mt-4">Estructura de Precios</h2>
-          </div>
-          
-          <div className="glass p-12 rounded-[4rem] flex flex-col md:flex-row gap-12 border-b-8 border-b-[var(--accent-1)]">
-             <div className="flex-1 space-y-8">
-                <div className="p-8 glass rounded-[2rem]">
-                   <h4 className="text-xs font-black uppercase tracking-widest opacity-50 mb-4">Cálculo Base (H)</h4>
-                   <p className="text-4xl font-black">$25.000 <span className="text-sm opacity-40">/ hora (Mínimo)</span></p>
-                </div>
-                <Accordion title="Roles Operativos" icon="👥">
-                   <p><strong>Multimedia:</strong> Animación, Web, Video.</p>
-                   <p><strong>Diseño:</strong> Infografía, Editorial, Marca.</p>
-                </Accordion>
-             </div>
-             <div className="flex-1 glass p-8 rounded-[2rem] bg-[var(--accent-1)] bg-opacity-5">
-                <h4 className="text-xs font-black uppercase tracking-widest opacity-50 mb-6">Paquetes Sugeridos</h4>
-                <div className="space-y-4">
-                   {[
-                     { n: 'Básico', d: 'Infografía + Deck (10h)', p: '$250k+' },
-                     { n: 'Estándar', d: 'Web OnePage + Video (40h)', p: '$1M+' },
-                     { n: 'Pro', d: 'Campaña Transmedia (100h)', p: '$2.5M+' }
-                   ].map(pkg => (
-                     <div key={pkg.n} className="flex justify-between items-center p-4 rounded-2xl bg-white bg-opacity-10 border border-white/10">
-                        <div>
-                           <p className="font-bold text-xs uppercase text-[var(--accent-1)]">{pkg.n}</p>
-                           <p className="text-[10px] opacity-60 font-medium">{pkg.d}</p>
-                        </div>
-                        <p className="font-black">{pkg.p}</p>
-                     </div>
-                   ))}
-                </div>
-                <p className="mt-6 text-[10px] opacity-40 italic">Precios estimados. Sujetos a negociación por complejidad científica.</p>
-             </div>
-          </div>
-        </section>
-
-        <footer className="pt-24 border-t border-[var(--border-subtle)] opacity-40 flex flex-col md:flex-row justify-between gap-12 pb-24">
-          <div className="flex items-center gap-4">
-             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[var(--accent-1)] to-[var(--accent-2)]" />
-             <div>
-                <span className="font-black font-[var(--font-space)] text-xl block">Colectivo Transmedia</span>
-                <span className="text-[10px] font-bold tracking-[0.3em] uppercase">Blueprint v2.0</span>
-             </div>
-          </div>
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-right">
-             <p>Arquitectura IA por Antigravity</p>
-             <p className="text-[var(--accent-1)] mt-2">Acceso Reservado • Cali 2024</p>
-          </div>
-        </footer>
+         </div>
       </main>
 
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Space+Grotesk:wght@300;400;700;900&display=swap');
-        
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+      {/* The Global Drawer Component */}
+      <Drawer 
+        isOpen={!!activeModule} 
+        onClose={() => setActiveModule(null)} 
+        module={activeModule} 
+      />
 
-        body { scroll-behavior: smooth !important; }
+      {/* Footer */}
+      <footer className="relative z-10 px-6 py-12 text-center border-t border-[var(--border-subtle)] max-w-7xl mx-auto text-xs opacity-50 font-bold uppercase tracking-widest mt-24 flex flex-col md:flex-row justify-between items-center gap-6">
+        <span>© 2024 Colectivo Transmedia</span>
+        <span>Strictly Confidential • Santiago de Cali</span>
+        <span>By Antigravity Engine</span>
+      </footer>
+
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&display=swap');
         
+        body { scroll-behavior: smooth; }
         .glass {
-          background: rgba(var(--bg-primary-rgb, 255, 255, 255), 0.6);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
+          background: rgba(var(--bg-primary-rgb, 255, 255, 255), 0.4);
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
           border: 1px solid var(--border-subtle);
         }
-        
         .dark .glass {
-          background: rgba(2, 6, 23, 0.6);
+          background: rgba(2, 6, 23, 0.4);
         }
-
         .grid-overlay {
           background-image: 
             linear-gradient(var(--grid-line) 1px, transparent 1px),
             linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-          background-size: 80px 80px;
+          background-size: 60px 60px;
         }
-
-        .gradient-text {
-          background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+          background: var(--border-strong); 
+          border-radius: 20px; 
+          border: 2px solid transparent; 
+          background-clip: padding-box; 
         }
       `}</style>
     </div>
