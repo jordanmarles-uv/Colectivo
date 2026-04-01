@@ -84,8 +84,8 @@ export default function ParticleCanvas() {
         p.vx *= 0.99;
         p.vy *= 0.99;
 
-        // Pulsing size
-        const pulsingSize = p.size + Math.sin(p.pulse) * 0.8;
+        // Pulsing size and ensure it's not negative
+        const pulsingSize = Math.max(0.1, p.size + Math.sin(p.pulse) * 0.8);
         const alpha = p.opacity * (0.7 + 0.3 * Math.sin(p.pulse));
 
         // Draw glow
