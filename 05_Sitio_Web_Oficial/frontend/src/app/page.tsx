@@ -6,6 +6,7 @@ import ServicesSection from "@/components/ServicesSection";
 import ProcessSection from "@/components/ProcessSection";
 import TranslatorDemo from "@/components/TranslatorDemo";
 import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -36,17 +37,7 @@ export default function Home() {
         <ContactSection />
       </section>
 
-      {/* Footer */}
-      <footer
-        className="relative z-10 py-12 px-8 text-center scene"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
-      >
-        <div className="font-space font-black text-lg gradient-text mb-2">Colectivo Transmedia</div>
-        <p style={{ color: "rgba(255,255,255,0.25)", fontSize: "0.8rem" }}>
-          Cali, Valle del Cauca · Colombia · {new Date().getFullYear()} ·{" "}
-          <span style={{ color: "rgba(108,99,255,0.6)" }}>Todos los derechos morales reservados (Ley 23 de 1982 - DNDA)</span>
-        </p>
-      </footer>
+      <Footer />
     </main>
   );
 }
