@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import ParticleCanvas from "./ParticleCanvas";
 
 const WORDS = [
   "Papers Científicos",
