@@ -63,7 +63,7 @@ export default function Footer() {
                 width="100%" 
                 height="100%" 
                 style={{ border: 0, opacity: 0.3 }} 
-                allowFullScreen="" 
+                allowFullScreen={true} 
                 loading="lazy"
               />
           </div>
