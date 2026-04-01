@@ -1,7 +1,68 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { modulesData, DeepModule, MatryoshkaItem } from './data';
+import { modulesData, DeepModule, MatryoshkaItem, glossary } from './data';
+
+import { createPortal } from 'react-dom';
+
+const TermPopup = ({ term, definition }: { term: string, definition: string }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const modalContent = isOpen ? createPortal(
+    <span className="fixed inset-0 z-[9999] flex items-center justify-center cursor-default" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh' }} onClick={(e) => e.stopPropagation()}>
+      <span 
+        className="absolute inset-0 z-[9999] cursor-pointer bg-[#020617]/60 backdrop-blur-md" 
+        onClick={(e) => { e.stopPropagation(); setIsOpen(false); }} 
+      />
+      <span className="relative z-[10000] w-[90vw] max-w-sm bg-[var(--bg-primary)] p-6 rounded-3xl shadow-2xl border border-[var(--border-subtle)] text-center flex flex-col items-center animate-in fade-in zoom-in duration-200">
+         <span className="w-12 h-12 flex items-center justify-center bg-[var(--accent-1)]/10 text-[var(--accent-1)] rounded-full text-2xl font-black mb-4">
+           ?
+         </span>
+         <strong className="block text-xl font-black font-[var(--font-space)] text-[var(--text-primary)] mb-3 capitalize">{term}</strong>
+         <span className="block text-sm text-[var(--text-secondary)] leading-relaxed">{definition}</span>
+         <button 
+           onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+           className="mt-6 px-6 py-2 rounded-full bg-[var(--accent-1)] text-white text-xs font-bold tracking-widest uppercase hover:bg-[var(--accent-2)] transition-colors inline-block"
+         >
+           Genial, gracias
+         </button>
+      </span>
+    </span>,
+    document.body
+  ) : null;
+
+  return (
+    <span 
+      className="relative inline-flex items-center cursor-pointer group"
+      onClick={(e) => { e.stopPropagation(); setIsOpen(true); }}
+      title="Ver definición pedagógica"
+    >
+      <strong className="text-[var(--accent-1)] font-bold group-hover:underline decoration-[var(--accent-1)] decoration-dashed underline-offset-4 transition-all">{term}</strong>
+      <span 
+        className="ml-1 w-[18px] h-[18px] inline-flex items-center justify-center rounded-full bg-[var(--accent-1)] text-white text-[10px] font-black leading-none group-hover:scale-110 transition-transform shadow-sm"
+      >
+        ?
+      </span>
+      {modalContent}
+    </span>
+  );
+};
+
+const glossaryTerms = Object.keys(glossary).sort((a, b) => b.length - a.length);
+const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const termsRegex = new RegExp(`\\b(${glossaryTerms.map(escapeRegExp).join('|')})\\b`, 'gi');
+
+const renderWithTooltips = (text: string) => {
+  if (!glossaryTerms.length) return text;
+  const parts = text.split(termsRegex);
+  return parts.map((part, i) => {
+    const termKey = glossaryTerms.find(term => term.toLowerCase() === part.toLowerCase());
+    if (termKey) {
+      return <TermPopup key={i} term={part} definition={glossary[termKey]} />;
+    }
+    return part;
+  });
+};
 
 // --- Markdown Parser Inteligente (Sin dependencias pesadas) ---
 // Interpreta viñetas, negritas dobles y saltos de línea para renderizar texto crudo.
@@ -12,11 +73,11 @@ const parseMarkdown = (text: string) => {
     // Si la línea es un elemento de lista (empieza con * o - o 1.)
     const isList = line.trim().startsWith('* ') || line.trim().startsWith('- ') || /^\d+\.\s/.test(line.trim());
     
-    // Parseador básico de negritas (**texto**)
+    // Parseador básico de negritas (**texto**) combinando los tooltips
     const formatBold = (str: string) => {
       const parts = str.split('**');
-      if (parts.length === 1) return str;
-      return parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="font-black text-[var(--accent-1)]">{part}</strong> : part);
+      if (parts.length === 1) return renderWithTooltips(str);
+      return parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="font-black text-[var(--accent-1)]">{renderWithTooltips(part)}</strong> : renderWithTooltips(part));
     };
 
     if (isList) {
@@ -57,9 +118,6 @@ const AccordionMatryoshka = ({ item }: { item: MatryoshkaItem }) => {
         className="w-full px-6 py-5 flex justify-between items-center text-left"
       >
         <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 pr-4">
-          <span className="text-[10px] uppercase font-black tracking-widest text-[var(--text-secondary)] opacity-50 px-2 py-1 rounded bg-[var(--bg-secondary)] border border-[var(--border-subtle)]">
-            Origen: {item.originalSource}
-          </span>
           <span className="font-bold font-[var(--font-space)] text-lg md:text-xl text-[var(--text-primary)] leading-tight">{item.title}</span>
         </div>
         <span className={`transform transition-transform duration-500 text-[var(--accent-1)] font-black text-2xl shrink-0 ${isOpen ? 'rotate-180' : ''}`}>
@@ -124,6 +182,15 @@ const MatryoshkaDrawer = ({
 
         {/* Cuerpo del Panel: Los Acordeones (La Matrioska) */}
         <div className="px-6 md:px-10 py-10 pb-32">
+          
+          {/* Cita de Síntesis */}
+          <div className="mb-10 p-8 rounded-3xl bg-[var(--accent-1)]/5 border border-[var(--accent-1)]/20 relative">
+            <span className="absolute -top-6 -left-2 text-6xl text-[var(--accent-1)] opacity-20 font-[var(--font-space)] select-none">"</span>
+            <p className="text-lg md:text-xl md:leading-relaxed font-medium text-[var(--text-primary)] relative z-10 italic opacity-90">
+              {module.synthesis}
+            </p>
+          </div>
+
           {module.accordions.map((acc) => (
             <AccordionMatryoshka key={acc.id} item={acc} />
           ))}

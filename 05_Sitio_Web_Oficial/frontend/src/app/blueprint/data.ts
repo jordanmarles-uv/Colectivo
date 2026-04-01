@@ -10,6 +10,7 @@ export type DeepModule = {
   title: string;
   icon: string;
   summary: string;
+  synthesis: string;
   stats: { label: string; val: string }[];
   accordions: MatryoshkaItem[];
 };
@@ -20,6 +21,7 @@ export const modulesData: DeepModule[] = [
     title: 'Núcleo & Ecosistema',
     icon: '🌐',
     summary: 'La visión territorial de NIDO y el marco departamental 2032.',
+    synthesis: 'El ecosistema del Valle del Cauca está en un punto de ebullición. Con más de 300 startups impulsadas por NIDO y una política pública de Ciencia, Tecnología e Innovación enfocada en 7 ejes clave (Biodiversidad, Agro, Salud, etc.), existe una urgencia por traducir la complejidad técnica en narrativas de alto impacto que conecten a investigadores con inversionistas y tomadores de decisión.',
     stats: [
       { label: 'Startups NIDO', val: '+300' },
       { label: 'Focos CTeI', val: '7 Ejes' },
@@ -86,6 +88,7 @@ En conjunto, NIDO, REDDI, Parquesoft Pacífico, Zonamerica y la Cámara de Comer
     title: 'Recursos & Estructura',
     icon: '💻',
     summary: 'Infraestructura tecnológica disponible y distribución de roles.',
+    synthesis: 'Comenzamos ligeros, ágiles y bootstrap. Dos mentes híbridas cruzando diseño, tecnología y ciencia, operando con una infraestructura técnica in-house optimizada. Nuestro mayor activo no es el hardware, es la metodología: transformar la densidad de un paper o un desarrollo tecnológico en micro-experiencias hiper curadas.',
     stats: [
       { label: 'Equipo', val: '2 Personas' },
       { label: 'Costo Base', val: 'Bootstrap' },
@@ -121,6 +124,7 @@ Ambos colaboran en la conceptualización de proyectos y el contacto con clientes
     title: 'Línea de Vida (12 Meses)',
     icon: '🗓️',
     summary: 'Plan de acción detallado para asegurar la tracción comercial a 1 año.',
+    synthesis: 'Una ejecución milimétrica dividida en 4 fases, desde la validación de los primeros Productos Mínimos Viables transfiriendo proyectos simulados de la Universidad del Valle a scrollytelling, hasta la consolidación de tarifas por "Value-Based Pricing". No buscamos volumen masivo, buscamos 5 a 10 instituciones y equipos altamente comprometidos con revolucionar su comunicación de resultados.',
     stats: [
       { label: 'Fases', val: '4 Fases' },
       { label: 'Meta', val: '5 a 10 Cli' },
@@ -204,6 +208,7 @@ Ambos colaboran en la conceptualización de proyectos y el contacto con clientes
     title: 'Modelos & Ventas',
     icon: '💵',
     summary: 'Cotización por horas hombre y acercamientos outbound ("Lean Sales").',
+    synthesis: 'Vendemos valor, no bytes. Nuestra estrategia comercial huye del discurso genérico de las agencias tradicionales. Usamos un enfoque "Lean Outbound" altamente quirúrgico: analizamos qué laboratorio universitario o qué startup en incubación comunica mal su avance, y les mostramos, con demostraciones reales, cómo el diseño transmedia retiene y multiplica la inversión (Value-Based Pricing) sin disonancias técnicas.',
     stats: [
       { label: 'Ventas', val: 'Outbound' },
       { label: 'Pricing', val: 'Value-Based' },
@@ -237,6 +242,7 @@ Ambos colaboran en la conceptualización de proyectos y el contacto con clientes
     title: 'Blindaje Jurídico',
     icon: '⚖️',
     summary: 'Regímenes Tributarios y Derechos Patrimoniales vs Autor (DNDA).',
+    synthesis: 'La creatividad no es un commodity, y nuestro conocimiento tampoco. El blindaje jurídico establece la diferencia crucial entre vender las manos y vender la cabeza. Asegurar la titularidad moral irrenunciable sobre nuestro storytelling y dirección de arte nos permite construir el mejor portafolio de la región, mientras nuestros clientes explotan (Derechos Patrimoniales) las piezas para levantar capital y cumplir hitos institucionales.',
     stats: [
       { label: 'Tope UVT', val: '3.500 / 4.000' },
       { label: 'Regla', val: 'F. Electrónica' },
@@ -330,6 +336,7 @@ Estas cláusulas deben adjuntarse a los contratos de prestación de servicios y 
     title: 'Formatos Deep Tech 2026',
     icon: '🎬',
     summary: 'Decisiones narrativas y entregables visuales requeridos por fondos CTeI.',
+    synthesis: 'Adiós a los PDFs de 40 páginas. En 2026, un inversionista decide en 2 minutos. Entregamos las "cápsulas transmedia" del futuro: One-Pagers letales, micrositios en formato scrollytelling y dashboards interactivos. Herramientas diseñadas exclusivamente para startups en Deep Tech que necesitan que la ciencia dura luzca irresistible, manteniendo rigurosidad absoluta en los datos.',
     stats: [
       { label: 'Visión', val: 'Short/Sweet' },
       { label: 'Interact', val: 'Scrollytelling' },
@@ -397,3 +404,22 @@ Comparado con otros estudios, esta oferta mezcla diseño editorial, multimedia e
     ]
   }
 ];
+
+export const glossary: Record<string, string> = {
+  "startups": "Empresas emergentes, usualmente de base tecnológica, diseñadas para crecer muy rápido.",
+  "pitch decks": "Presentaciones visuales muy cortas e impactantes usadas para convencer a inversionistas.",
+  "pitch deck": "Presentación visual corta e impactante usada para convencer a inversionistas.",
+  "data rooms": "Espacios seguros (usualmente en la nube) donde se guarda la información confidencial de una empresa para que un inversionista la revise exhaustivamente.",
+  "scrollytelling": "Formato de lectura web interactivo: la historia y animaciones avanzan poco a poco junto al scroll del usuario, evitando aburrirlo.",
+  "vc": "Venture Capital (Capital de Riesgo). Fondos gigantes que invierten mucho dinero en startups tecnológicas a cambio de un porcentaje de la empresa.",
+  "deep tech": "Empresas basadas en descubrimientos científicos puros o alta ingeniería (ej. biotecnología, inteligencia artificial compleja, robótica espacial).",
+  "one-pagers": "Folletos ultra resumidos de una sola cara. Consiguen concentrar todo el poder de un proyecto gigante en una lectura de un minuto.",
+  "b2b": "Business to Business. Modelo de ventas en donde una empresa le vende servicios a otra empresa u organización, y no al comprador final de la calle.",
+  "kpis": "Key Performance Indicators (Indicadores Clave). Son métricas matemáticas que se usan para medir si un proyecto tuvo verdadero éxito o no.",
+  "spin-offs": "Empresas nuevas que nacen separándose y tomando prestado el conocimiento de un gran proyecto de investigación de una universidad u organización mayor.",
+  "healthtech": "Tecnología moderna aplicada a la salud: softwares para telemedicina, expedientes o biotecnología médica.",
+  "edtech": "Tecnología educativa. Plataformas y herramientas diseñadas desde cero para hacer el aprendizaje mucho más fácil, rápido y entretenido.",
+  "fintech": "Tecnología financiera. Emprendimientos que innovan el uso de la banca e inversiones para hacer el manejo del dinero más directo.",
+  "frameworks": "Entornos de trabajo o 'moldes' base que utilizan desarrolladores o diseñadores para armar más rápido un proyecto sin empezar desde cero.",
+  "dashboards": "Paneles de control o 'tableros' interactivos que agrupan los datos más críticos y los muestran de forma hiper visual (gráficas, barras, porcentajes)."
+};
