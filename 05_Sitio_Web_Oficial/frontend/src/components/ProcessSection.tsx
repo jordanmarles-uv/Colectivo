@@ -2,40 +2,6 @@
 import { useState, useRef, useEffect } from "react";
 
 const steps = [
-  {
-    step: "01",
-    title: "La Ciencia Llega Cruda",
-    desc: "Recibes un paper de 80 páginas, un Excel lleno de estadísticas o un pitch deck con 40 diapositivas de texto.",
-    icon: "📄",
-    color: "#6C63FF",
-  },
-  {
-    step: "02",
-    title: "La IA Extrae lo Esencial",
-    desc: "Nuestros agentes leen, clasifican y extraen las métricas críticas, tendencias y la 'analogía del mundo real' perfecta para cada dato.",
-    icon: "🤖",
-    color: "#9D4EDD",
-  },
-  {
-    step: "03",
-    title: "El Humano Inyecta el Alma",
-    desc: "Nosotros trazamos las ilustraciones, elegimos las tipografías cálidas, grabamos testimonios reales y diseñamos la experiencia emocional que la IA no puede inventar.",
-    icon: "🎨",
-    color: "#00D4FF",
-  },
-  {
-    step: "04",
-    title: "Tu Ciencia Conquista",
-    desc: "Un Scrollytelling interactivo, un Pitch Deck de clase VC o una infografía viral que tu audiencia comprende en segundos.",
-    icon: "🚀",
-    color: "#FF6B9D",
-  },
-];
-
-"use client";
-import { useState, useRef, useEffect } from "react";
-
-const steps = [
   { step: "01", title: "Auditoría Profunda", desc: "Analizamos tu data bruta, identificamos el valor oculto y definimos el ángulo narrativo ganador.", color: "var(--accent-1)", icon: "🔬" },
   { step: "02", title: "Estructuración IA", desc: "Nuestros agentes extraen patrones, organizan la arquitectura de la información y proponen flujos lógicos.", color: "var(--accent-2)", icon: "🤖" },
   { step: "03", title: "Dirección Humana", desc: "Filtramos la información, le damos tono de voz y aplicamos el storytelling que conecta emocionalmente.", color: "var(--accent-3)", icon: "✍️" },
